@@ -3,7 +3,7 @@ OBJECTS = game.cpp
 
 CC = g++
 
-LINKER_FLAGS = -lSDL2
+LINKER_FLAGS = -lSDL2 -lSDL2_image
 
 OBJECTS_NAME = gangbang
 
