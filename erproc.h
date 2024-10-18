@@ -4,8 +4,9 @@
 
 bool Init(); // start SDL and creat window
 bool Init_IMG();
-bool LoadMedia(); // Loads media
-void Pause();
+SDL_Surface* LoadOneSurface(const char *image); // Load one image
+bool LoadAllMedia(); // Loads all media
+void EventHandler(); // Обработчик событий
 void Close(); // Free media and shuts down SDL
 
 #endif

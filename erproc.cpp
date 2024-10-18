@@ -39,37 +39,98 @@ bool Init_IMG()
     return succses;
 }
 
-bool LoadMedia()
+SDL_Surface* LoadOneSurface(const char *imagePath)
 {
-    bool succses = true;
-    const char *imagePath = "/home/vlad/Изображения/first_blood.jpg";
-    gHelloWorld =  IMG_Load(imagePath);
-    if(gHelloWorld == NULL)
+    SDL_Surface* image_photo =  IMG_Load(imagePath);
+    if(image_photo == NULL)
     {
         printf("Unable to load image %s! SDL_ERROR: %s\n", imagePath, SDL_GetError());
-        succses = false;
     }
-    return succses;
+    return image_photo;
 }
 
-void Pause()
+bool LoadAllMedia()
+{
+    bool succses = true;
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFULT] = LoadOneSurface(gOnePathImage);
+    if(gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFULT] == NULL)
+    {
+        printf("Failed to load One image!\n");
+        succses = false;
+    }
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_UP] = LoadOneSurface(gTwoPathImage);
+    if(gKeyPressSurfaces[KEY_PRESS_SURFACE_UP] == NULL)
+    {
+        printf("Failed to load Two image!\n");
+        succses = false;
+    }
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN] = LoadOneSurface(gThreePathImage);
+    if(gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN] == NULL)
+    {
+        printf("Failed to load Three image!\n");
+        succses = false;
+    }
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT] = LoadOneSurface(gFourPathImage);
+    if(gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT] == NULL)
+    {
+        printf("Failed to load Four image!\n");
+        succses = false;
+    }
+    gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT] = LoadOneSurface(gFivePathImage);
+    if(gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT] == NULL)
+    {
+        printf("Failed to load Five image!\n");
+        succses = false;
+    }
+    
+    return succses;
+}
+void EventHandler()
 {
     SDL_Event e;
     bool quite = false;
+    gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFULT];
     while (quite == false)
     {
         while(SDL_PollEvent(&e))
         {
             if(e.type == SDL_QUIT)
                 quite = true;
+            else if  (e.type == SDL_KEYDOWN)
+            {
+                switch(e.key.keysym.sym)
+                {
+                    case SDLK_UP:
+                        gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_UP];
+                        break;
+                
+                    case SDLK_DOWN:
+                        gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DOWN];
+                        break;
+                
+                    case SDLK_LEFT:
+                        gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_LEFT];
+                        break;
+                
+                    case SDLK_RIGHT:
+                        gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_RIGHT];
+                        break;
+                
+                    defult:     
+                        gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFULT];
+                        break;
+                }
+            }
         }
+        SDL_BlitSurface(gCurrentSurface, NULL, gScreenSurface, NULL);
+        SDL_UpdateWindowSurface(gWindow);
     }
 }
 
 void Close()
 {
-    SDL_FreeSurface(gHelloWorld);
-    gHelloWorld = NULL;
+    SDL_FreeSurface(gScreenSurface);
+    gScreenSurface = NULL;
 
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;

@@ -16,18 +16,14 @@ int main(int argc, char *argv[])
         }
         else
         {
-            if(!LoadMedia())
+            if(!LoadAllMedia())
                 printf("Failed to load media.\n");
             else
             {
-                SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, NULL);
-                SDL_UpdateWindowSurface(gWindow);
+                EventHandler();
+                Close();
             }
         }
     } 
-    Pause();
-    Close();
     return 0;
 }
-
-
