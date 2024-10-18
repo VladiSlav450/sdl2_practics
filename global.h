@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 const int SCREEN_WIDHT = 1280;
-const int SCREEN_HIGHT = 1360;
+const int SCREEN_HIGHT = 920;
 
 extern SDL_Window* gWindow;
 extern SDL_Surface* gScreenSurface;

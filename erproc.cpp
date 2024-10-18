@@ -41,12 +41,20 @@ bool Init_IMG()
 
 SDL_Surface* LoadOneSurface(const char *imagePath)
 {
+    SDL_Surface* optimizedSurface = NULL;
     SDL_Surface* image_photo =  IMG_Load(imagePath);
     if(image_photo == NULL)
     {
         printf("Unable to load image %s! SDL_ERROR: %s\n", imagePath, SDL_GetError());
     }
-    return image_photo;
+    else 
+    {
+        optimizedSurface = SDL_ConvertSurface(image_photo, gScreenSurface->format, 0);
+        if(optimizedSurface == NULL)
+            printf("Unable optimize image %s! SDL Error: %s\n", imagePath, SDL_GetError());
+        SDL_FreeSurface(image_photo);
+    }
+    return optimizedSurface;
 }
 
 bool LoadAllMedia()
@@ -122,7 +130,12 @@ void EventHandler()
                 }
             }
         }
-        SDL_BlitSurface(gCurrentSurface, NULL, gScreenSurface, NULL);
+        SDL_Rect stretchRect;
+        stretchRect.x = 0;
+        stretchRect.y = 0;
+        stretchRect.w = SCREEN_WIDHT;
+        stretchRect.h = SCREEN_HIGHT;
+        SDL_BlitScaled(gCurrentSurface, NULL, gScreenSurface, &stretchRect);
         SDL_UpdateWindowSurface(gWindow);
     }
 }
