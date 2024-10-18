@@ -1,5 +1,5 @@
 # Определяем переменные
-OBJECTS = game.cpp
+OBJECTS = game.cpp erproc.cpp global.cpp
 
 CC = g++
 
