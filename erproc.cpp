@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include <cerrno>
 #include "erproc.h"
 #include "global.h"
 
@@ -21,7 +22,7 @@ void Create_Window()
     }
 }
 
-void Create_RenderColors(int one_col, int two_col, int three_col, int four_col)
+void Create_RenderColors()
 {
     gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED); 
     if(gRenderer == NULL)
@@ -44,7 +45,7 @@ void Init_IMG()
 
 void LoadMedia()
 {
-    gTexture = LoadTexture(gOnePathImage);
+    gTexture = loadTexture(gOnePathImage);
     if(gTexture == NULL)
     {
         throw("Failed to load media!", SDL_GetError());
@@ -61,10 +62,10 @@ SDL_Texture* loadTexture(const char *imagePath)
         throw("Failed to load texture image!", SDL_GetError());
     }
 
-    newTexture = SDL_CreateTextureFromSurface(gRenderer, p_image);
+    newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedsurface);
     if(newTexture == NULL)
         throw("Failed to create texture image!", SDL_GetError());
-    SDL_FreeSurface(p_image);
+    SDL_FreeSurface(loadedsurface);
     return newTexture; 
 }
 
@@ -73,7 +74,6 @@ void EventHandler()
 {
     SDL_Event e;
     bool quite = false;
-    gCurrentSurface = gKeyPressSurfaces[KEY_PRESS_SURFACE_DEFULT];
     while (quite == false)
     {
         while(SDL_PollEvent(&e))
@@ -82,8 +82,11 @@ void EventHandler()
                 quite = true;
         }
         SDL_RenderClear(gRenderer);
+        SDL_RenderPresent(gRenderer); 
+        SDL_Delay(2000);    
         SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
         SDL_RenderPresent(gRenderer); 
+        SDL_Delay(2000);    
     }
 }
 
@@ -93,11 +96,6 @@ void Close()
     {
         SDL_DestroyTexture(gTexture);
         gTexture = NULL;
-    }
-    if(gScreenSurface != NULL)
-    {
-    SDL_FreeSurface(gScreenSurface);
-    gScreenSurface = NULL;
     }
     if(gRenderer != NULL)
     {
@@ -129,7 +127,7 @@ FuExeption::FuExeption(const FuExeption& other)
     get_errorSDL = strdup(other.get_errorSDL);
 }
 
-~FuExeption::FuExeption()
+FuExeption::~FuExeption()
 {
     delete[] comment;
     delete[] get_errorSDL;

@@ -1,13 +1,13 @@
 #ifndef ERPROC_h
 #define ERPROC_h
 
-bool Init_SDL();
-bool Create_Window();
-bool Create_RenderColors();
-bool Init_IMG();
-bool LoadMedia();
-bool EventHandler();
-bool Close();
+void Init_SDL();
+void Create_Window();
+void Create_RenderColors();
+void Init_IMG();
+void LoadMedia();
+void EventHandler();
+void Close();
 SDL_Texture* loadTexture(const char *imagePath);
 
 class FuExeption
@@ -19,8 +19,8 @@ public:
     FuExeption(const char *comment, const char *get_errorSDL);
     FuExeption(const FuExeption& other);
     ~FuExeption();
-    const char *GetComment() { return comment; }
-    const char *Get_ErrorSdl() { return get_errorSDL; }
+    const char *GetComment() const { return comment; }
+    const char *Get_ErrorSDL() const { return get_errorSDL; }
     int GetErrno() const { return err_code; }
     static char *strdup(const char *str);
 };
