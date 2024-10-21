@@ -1,29 +1,26 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
+#include <cerrno>
 #include "erproc.h"
 #include "global.h"
 
 int main(int argc, char *argv[])
 {
-    if(!Init())
-        printf("Failed t initialize\n");
-    else
+    try
     {
-        if(!Init_IMG())
-        {
-            printf("Failed to IMG initialize\n");
-        }
-        else
-        {
-            if(!LoadAllMedia())
-                printf("Failed to load media.\n");
-            else
-            {
-                EventHandler();
-                Close();
-            }
-        }
-    } 
+        Init_SDL();
+        Create_Window();
+        Create_RenderColors();
+//        Init_IMG();
+//        LoadMedia();
+        EventHandler();
+        Close();
+    }
+    catch(const FuExeption &ex)
+    {
+        fprintf(stderr, "Failed initialize: %s (%s): %s\n", ex.Get_ErrorSDL(), ex.GetComment(), strerror(ex.GetErrno()));
+        return 1;
+    }
     return 0;
 }
