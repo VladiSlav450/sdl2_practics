@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
         Init_SDL();
         Create_Window();
         Create_RenderColors();
-        Init_IMG();
-        LoadMedia();
+//        Init_IMG();
+//        LoadMedia();
         EventHandler();
         Close();
     }

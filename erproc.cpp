@@ -71,7 +71,38 @@ SDL_Texture* loadTexture(const char *imagePath)
 
 
 void EventHandler()
-{
+{   
+    SDL_RenderClear(gRenderer);
+    SDL_RenderPresent(gRenderer); 
+    for( double i = 0; i < SCREEN_HIGHT; i++)
+    {
+        Pixel a(SCREEN_WIDHT / 2, i, 125);
+        a.Show();
+        SDL_RenderPresent(gRenderer);
+    }
+
+    for(double i = 0; i < SCREEN_WIDHT; i++)
+    {
+        Pixel a(i, SCREEN_HIGHT / 2, 125);
+        a.Show();
+        SDL_RenderPresent(gRenderer);
+    }
+
+    Squre kub(50, 50, 100, 200);
+    kub.PolygonalCahin::Show();
+    SDL_RenderPresent(gRenderer);
+
+    Ractangle rac(150, 150, 300, 600, 86);
+    rac.PolygonalCahin::Show();
+    SDL_RenderPresent(gRenderer);
+    
+    FillRactange filrac(200, 320, 150, 200, 0);
+    filrac.FillRactange::Show();
+    SDL_RenderPresent(gRenderer);
+    printf("Должны выводить цветной прямоугольник!\n"); 
+    SDL_Delay(2000);
+    
+         
     SDL_Event e;
     bool quite = false;
     while (quite == false)
@@ -81,12 +112,7 @@ void EventHandler()
             if(e.type == SDL_QUIT)
                 quite = true;
         }
-        SDL_RenderClear(gRenderer);
-        SDL_RenderPresent(gRenderer); 
-        SDL_Delay(2000);    
-        SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);
-        SDL_RenderPresent(gRenderer); 
-        SDL_Delay(2000);    
+           
     }
 }
 
@@ -111,7 +137,76 @@ void Close()
     SDL_Quit();
 }
 
+void GraphObject::Move(double nx, double ny)
+{
+    //  Hide();
+    x = nx;
+    y = ny;
+    Show();
+}
 
+void Pixel::Show()
+{
+    SDL_SetRenderDrawColor(gRenderer, color, color, color, color);
+    SDL_RenderDrawPoint(gRenderer, x, y);
+}
+
+void Pixel::Hide()
+{
+    
+}
+
+void Circle::Show()
+{
+
+}
+
+void Circle::Hide()
+{
+
+}
+
+void PolygonalCahin::AddVertex(double adx, double ady)
+{
+    Vertex *tmp = new Vertex;
+    tmp->dx = adx;
+    tmp->dy = ady;
+    tmp->next = first;
+    first = tmp;
+}
+
+PolygonalCahin::~PolygonalCahin()
+{
+    while(first)
+    {
+        Vertex *tmp = first;
+        first = first->next;
+        delete tmp;
+    }
+}
+
+void PolygonalCahin::Show()
+{
+    SDL_SetRenderDrawColor(gRenderer, color, color, color, color);
+    Vertex *tmp = first;
+    while(tmp->next != 0)
+    {
+        SDL_RenderDrawLine(gRenderer, tmp->dx, tmp->dy, tmp->next->dx, tmp->next->dy);  
+        tmp = tmp->next;
+    }    
+    
+}
+
+void PolygonalCahin::Hide()
+{
+
+}
+
+void FillRactange::Show()
+{
+    SDL_SetRenderDrawColor(gRenderer, color, color, color, 255);
+    SDL_RenderFillRect(gRenderer, &fillrect);
+} 
 
 FuExeption::FuExeption(const char *cmt, const char *geterSDL)
 {
