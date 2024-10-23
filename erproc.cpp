@@ -74,45 +74,28 @@ void EventHandler()
 {   
     SDL_RenderClear(gRenderer);
     SDL_RenderPresent(gRenderer); 
-    for( double i = 0; i < SCREEN_HIGHT; i++)
-    {
-        Pixel a(SCREEN_WIDHT / 2, i, 125);
-        a.Show();
-        SDL_RenderPresent(gRenderer);
-    }
-
-    for(double i = 0; i < SCREEN_WIDHT; i++)
-    {
-        Pixel a(i, SCREEN_HIGHT / 2, 125);
-        a.Show();
-        SDL_RenderPresent(gRenderer);
-    }
-
-    Squre kub(50, 50, 100, 200);
-    kub.PolygonalCahin::Show();
+    Circle xyi(600, 400, 10, 0);
+    xyi.Circle::Show();
     SDL_RenderPresent(gRenderer);
-
-    Ractangle rac(150, 150, 300, 600, 86);
-    rac.PolygonalCahin::Show();
-    SDL_RenderPresent(gRenderer);
-    
-    FillRactange filrac(200, 320, 150, 200, 0);
-    filrac.FillRactange::Show();
-    SDL_RenderPresent(gRenderer);
-    printf("Должны выводить цветной прямоугольник!\n"); 
-    SDL_Delay(2000);
-    
          
     SDL_Event e;
-    bool quite = false;
-    while (quite == false)
+    bool quite = true;
+    while (quite)
     {
         while(SDL_PollEvent(&e))
         {
             if(e.type == SDL_QUIT)
-                quite = true;
+            {
+                quite = false;
+            }
+                xyi.HandEvent(e);
         }
-           
+        xyi.Move();
+        SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+        SDL_RenderClear(gRenderer);
+        xyi.Circle::Show();
+        SDL_RenderPresent(gRenderer);
+        
     }
 }
 
@@ -137,12 +120,10 @@ void Close()
     SDL_Quit();
 }
 
-void GraphObject::Move(double nx, double ny)
+void GraphObject::Move()
 {
     //  Hide();
-    x = nx;
-    y = ny;
-    Show();
+    
 }
 
 void Pixel::Show()
@@ -158,12 +139,88 @@ void Pixel::Hide()
 
 void Circle::Show()
 {
+    SDL_SetRenderDrawColor(gRenderer, color, color, color, color);
+    int crx = radius, cry = 0;
+    int err = 0;
+    while(crx >= cry)
+    {
+        DrawPointCircle(crx, cry);
+        cry++;
+        err += 2 * cry + 1;
+        if(err >=  2 * crx)
+        {
+            crx--;
+            err -= 2 * crx + 1;
+        }
+    }
+    
+}
 
+void Circle::DrawPointCircle(int& crx, int& cry)
+{
+    SDL_RenderDrawPoint(gRenderer, x + crx, y + cry);
+    SDL_RenderDrawPoint(gRenderer, x + cry, y + crx);
+    SDL_RenderDrawPoint(gRenderer, x - cry, y + crx);
+    SDL_RenderDrawPoint(gRenderer, x - crx, y + cry);
+    SDL_RenderDrawPoint(gRenderer, x - crx, y - cry);
+    SDL_RenderDrawPoint(gRenderer, x - cry, y - crx);
+    SDL_RenderDrawPoint(gRenderer, x + cry, y - crx);
+    SDL_RenderDrawPoint(gRenderer, x + crx, y - cry);
+}
+
+void Circle::HandEvent(SDL_Event& e)
+{
+    if(e.type == SDL_KEYDOWN && e.key.repeat == 0)
+    {
+        switch(e.key.keysym.sym) 
+        {
+            case SDLK_UP:
+                mVelY -= DOT_VEL;
+                break;
+            case SDLK_DOWN:
+                mVelY += DOT_VEL;
+                break;
+            case SDLK_LEFT:
+                mVelX -= DOT_VEL;
+                break;
+            case SDLK_RIGHT:
+                mVelX += DOT_VEL;
+                break;
+        }
+    }
+    else if(e.type == SDL_KEYUP && e.key.repeat == 0)
+    {
+        switch(e.key.keysym.sym) 
+        {
+            case SDLK_UP:
+                mVelY += DOT_VEL;
+                break;
+            case SDLK_DOWN:
+                mVelY -= DOT_VEL;
+                break;
+            case SDLK_LEFT:
+                mVelX += DOT_VEL;
+                break;
+            case SDLK_RIGHT:
+                mVelX -= DOT_VEL;
+                break;
+        }
+    }
 }
 
 void Circle::Hide()
 {
 
+}
+
+void Circle::Move()
+{
+    x += mVelX;
+    if((x - radius < 0) || (x + radius > SCREEN_WIDHT))
+        x -= mVelX;
+    y += mVelY;
+    if((y - radius < 0) || (y + radius > SCREEN_HIGHT))
+        y -= mVelY;
 }
 
 void PolygonalCahin::AddVertex(double adx, double ady)

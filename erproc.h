@@ -20,7 +20,7 @@ public:
     virtual  ~GraphObject() {}
     virtual void Hide() = 0;
     virtual void Show() = 0;
-    void Move(double nx, double ny); 
+    void Move(); 
 };
 
 class Pixel : public GraphObject
@@ -35,11 +35,16 @@ public:
 class Circle : public GraphObject
 {
     double radius;
+    const double DOT_VEL = 0.01;
+    double mVelX, mVelY;
 public:
-    Circle(double x, double y, double rad, int col) : GraphObject(x, y, col), radius(rad) {}
+    Circle(double x, double y, double rad, int col) : GraphObject(x, y, col), radius(rad), mVelX(0), mVelY(0) {}
     virtual ~Circle() {}
     virtual void Hide();    
     virtual void Show();
+    virtual void Move();
+    void HandEvent(SDL_Event& e);
+    void DrawPointCircle(int &crx, int &cry);
 
 };
 
