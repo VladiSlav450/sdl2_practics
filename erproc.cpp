@@ -1,7 +1,5 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <cerrno>
+// file: erproc.cpp
+
 #include "erproc.h"
 #include "global.h"
 
@@ -77,6 +75,10 @@ void EventHandler()
     Circle xyi(600, 400, 10, 0);
     xyi.Circle::Show();
     SDL_RenderPresent(gRenderer);
+
+    Squre kv(200, 300, 150, 0);
+    kv.PolygonalCahin::Show();  
+    SDL_RenderPresent(gRenderer);
          
     SDL_Event e;
     bool quite = true;
@@ -84,16 +86,25 @@ void EventHandler()
     {
         while(SDL_PollEvent(&e))
         {
-            if(e.type == SDL_QUIT)
+            switch(e.type)
             {
-                quite = false;
+                case SDL_QUIT:
+                    quite = false;
+                    break;
+                case SDL_KEYDOWN:
+                    if(e.key.keysym.sym == SDLK_ESCAPE)
+                    quite = false;
             }
-                xyi.HandEvent(e);
+            xyi.HandEvent(e);
         }
         xyi.Move();
         SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
         SDL_RenderClear(gRenderer);
         xyi.Circle::Show();
+
+        Squre kv(200, 300, 150, 0);
+        kv.PolygonalCahin::Show();  
+     
         SDL_RenderPresent(gRenderer);
         
     }
@@ -219,7 +230,7 @@ void Circle::Move()
     if((x - radius < 0) || (x + radius > SCREEN_WIDHT))
         x -= mVelX;
     y += mVelY;
-    if((y - radius < 0) || (y + radius > SCREEN_HIGHT))
+    if((y - radius < radius) || (y + radius > SCREEN_HIGHT))
         y -= mVelY;
 }
 

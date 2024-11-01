@@ -1,11 +1,9 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <stdio.h>
-#include <cerrno>
+// file: game.cpp
+
 #include "erproc.h"
 #include "global.h"
 
-int main(int argc, char *argv[])
+int mySDL_main()
 {
     try
     {

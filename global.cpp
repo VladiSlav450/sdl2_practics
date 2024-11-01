@@ -1,3 +1,5 @@
+// file: global.cpp
+
 #include "global.h"
 
 SDL_Window* gWindow = NULL; // Окно в котором будем выполнять рендеринг

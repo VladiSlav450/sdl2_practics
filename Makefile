@@ -1,5 +1,5 @@
 # Определяем переменные
-OBJECTS = game.cpp erproc.cpp global.cpp
+OBJECTS = SDL_game_main.cpp game.cpp erproc.cpp global.cpp
 
 CC = g++
 

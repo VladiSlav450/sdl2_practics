@@ -1,0 +1,15 @@
+# file: client_Makefile
+
+CC = g++
+CFLAGS = -g -w -Werror -Wall
+
+# Source files and output binary name
+OBJECTS = client_main.cpp client.cpp fu_errorpoc.cpp
+OBJECTS_NAME = g_client
+
+# Default target
+all: $(OBJECTS_NAME)
+
+# Rule to build the executable
+$(OBJECTS_NAME): $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(OBJECTS_NAME)

@@ -1,0 +1,15 @@
+# file: serv_Makefile
+
+CC = g++
+CFLAGS = -g -w -Werror -Wall
+
+# Source files and output binary name
+OBJECTS = serv_main.cpp server.cpp fu_errorpoc.cpp
+OBJECTS_NAME = g_serv
+
+# Default target
+all: $(OBJECTS_NAME)
+
+# Rule to build the executable
+$(OBJECTS_NAME): $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(OBJECTS_NAME)

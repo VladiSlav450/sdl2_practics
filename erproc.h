@@ -1,5 +1,13 @@
+// file: erproc.h
 #ifndef ERPROC_h
 #define ERPROC_h
+
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <stdio.h>
+#include <cerrno>
+
+int mySDL_main();
 
 void Init_SDL();
 void Create_Window();
